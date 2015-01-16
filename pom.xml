@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>statnlp-classification</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<name>BYU NLP Classification Library</name>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
