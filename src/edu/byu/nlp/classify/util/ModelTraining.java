@@ -31,9 +31,9 @@ import com.google.common.collect.Lists;
  * the form sample-1-3:sample 
  *
  */
-public class ModelTrainingOperations {
+public class ModelTraining {
 
-  private static final Logger logger = Logger.getLogger(ModelTrainingOperations.class.getName());
+  private static final Logger logger = Logger.getLogger(ModelTraining.class.getName());
   public static final double MAXIMIZE_IMPROVEMENT_THRESHOLD = 1e-6;
   public static final int MAXIMIZE_MAX_ITERATIONS = 20;
   public static final int MAXIMIZE_BATCH_SIZE = 3;
