@@ -55,10 +55,10 @@ public class UncertaintyPreservingNaiveBayesLearner implements ClassifierLearner
 		  String src = instance.getInfo().getSource();
 		  // instance has a label -- use that
 		  if (instance.getObservedLabel()!=null){
-        int label = instance.getObservedLabel(); 
-        if (label==0){System.out.println("label 0: "+src);}
-		    biases[label] += 1;
-        instance.asFeatureVector().scaleAndAddToRow(weights, label, data.getInfo().getNumClasses(), 1);
+	        int label = instance.getObservedLabel(); 
+	        //if (label==0){System.out.println("label 0: "+src);}
+			biases[label] += 1;
+	        instance.asFeatureVector().scaleAndAddToRow(weights, label, data.getInfo().getNumClasses(), 1);
 		  }
 		  // FIXME: currently this class is only called by SingleLabelLabeler, which calls it on data that has 
 		  // already been through DataBuilder converting all annotations to single labels. This must be fixed 
