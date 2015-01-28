@@ -17,7 +17,9 @@ package edu.byu.nlp.classify.util;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -33,7 +35,7 @@ import com.google.common.collect.Lists;
  */
 public class ModelTraining {
 
-  private static final Logger logger = Logger.getLogger(ModelTraining.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(ModelTraining.class);
   public static final double MAXIMIZE_IMPROVEMENT_THRESHOLD = 1e-6;
   public static final int MAXIMIZE_MAX_ITERATIONS = 20;
   public static final int MAXIMIZE_BATCH_SIZE = 3;
