@@ -26,6 +26,8 @@ public class BasicPrediction implements Prediction {
 
 	private final List<Integer> predictedLabels;
 	private final DatasetInstance instance;
+  private Integer alternativePredictedLabel;
+  private int[] predictedWordTopics;
 
   
 	public BasicPrediction(Integer predictedLabel, DatasetInstance instance) {
@@ -62,5 +64,23 @@ public class BasicPrediction implements Prediction {
   @Override
   public List<Integer> getPredictedLabels() {
     return predictedLabels;
+  }
+
+  public void setAlternativePredictedLabel(Integer val){
+    this.alternativePredictedLabel = val;
+  }
+  @Override
+  public Integer getAlternativePredictedLabel() {
+    return alternativePredictedLabel;
+  }
+
+
+  public void setPredictedWordTopics(int[] predictedWordTopics) {
+    this.predictedWordTopics=predictedWordTopics;
+  }
+  /** {@inheritDoc} */
+  @Override
+  public int[] getPredictedWordTopics() {
+    return predictedWordTopics;
   }
 }

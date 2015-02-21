@@ -21,6 +21,9 @@ import edu.byu.nlp.data.types.DatasetInstance;
 
 public interface Prediction {
 	Integer getPredictedLabel();
-	List<Integer> getPredictedLabels();
 	DatasetInstance getInstance();
+	
+	List<Integer> getPredictedLabels();
+	Integer getAlternativePredictedLabel();
+	int[] getPredictedWordTopics();
 }
