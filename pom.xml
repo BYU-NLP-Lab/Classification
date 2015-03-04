@@ -4,11 +4,10 @@
 	<parent>
 		<groupId>edu.byu.nlp</groupId>
 		<artifactId>byunlp-maven-base</artifactId>
-		<version>1.0-SNAPSHOT</version>
-		<relativePath>../byunlp-maven-base</relativePath>
+		<version>1.0</version>
 	</parent>
 	<artifactId>statnlp-classification</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>BYU NLP Classification Library</name>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
