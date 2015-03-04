@@ -83,26 +83,6 @@
 			<version>4.11</version>
 		</dependency>
 		<dependency>
-			<groupId>edu.byu.nlp</groupId>
-			<artifactId>jargparser</artifactId>
-			<version>0.3</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.byu.nlp</groupId>
-			<artifactId>commons</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.byu.nlp</groupId>
-			<artifactId>dataset-utils</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.byu.nlp</groupId>
-			<artifactId>annotationinterface</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.7</version>
@@ -112,6 +92,26 @@
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.7</version>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>edu.byu.nlp</groupId>
+			<artifactId>jargparser</artifactId>
+			<version>0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.byu.nlp</groupId>
+			<artifactId>commons</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.byu.nlp</groupId>
+			<artifactId>dataset-utils</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.byu.nlp</groupId>
+			<artifactId>annotationinterface</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 </project>
