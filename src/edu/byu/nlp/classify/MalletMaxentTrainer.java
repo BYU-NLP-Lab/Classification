@@ -44,6 +44,8 @@ public class MalletMaxentTrainer{
   private LabelAlphabet targetAlphabet;
   private List<DatasetInstance> externalInstances;
 
+  private MalletMaxentTrainer(){}
+  
   /**
    * The trainer takes care of converting the dataset into types that 
    * mallet can work with. Labels are not converted here, but 
