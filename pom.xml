@@ -7,7 +7,7 @@
 		<version>1.0</version>
 	</parent>
 	<artifactId>statnlp-classification</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.1</version>
 	<name>BYU NLP Classification Library</name>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -101,12 +101,12 @@
 		<dependency>
 			<groupId>edu.byu.nlp</groupId>
 			<artifactId>commons</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.byu.nlp</groupId>
 			<artifactId>dataset-utils</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.byu.nlp</groupId>
