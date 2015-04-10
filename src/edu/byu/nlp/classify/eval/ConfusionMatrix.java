@@ -51,25 +51,31 @@ public class ConfusionMatrix {
           }
       }
 
+      // header
       String title = "Truth\\Pred";
       maxLen = Math.max(maxLen, title.length());
 
       String headerFormat = "%" + maxLen + "s";
       StringBuilder sb = new StringBuilder(String.format(headerFormat, title));
 
+      sb.append(String.format("%6s", "|"));
+      
       for (int i = 0; i < matrix.getColumnDimension(); i++) {
           sb.append(String.format(" %6d", i));
       }
       sb.append('\n');
 
-      int rowLength = maxLen + 7 * labels.size();
+      // horizontal divider composed of hyphens
+      int rowLength = maxLen + 7 * (labels.size()+1);
       for (int i = 0; i < rowLength; i++) {
           sb.append('-');
       }
       sb.append('\n');
 
+      // body
       for (int truth = 0; truth < matrix.getRowDimension(); truth++) {
           sb.append(String.format(headerFormat, labels.get(truth)));
+          sb.append(String.format("%6s", truth+"|"));
           for (int guess = 0; guess < matrix.getColumnDimension(); guess++) {
               sb.append(String.format(" %6d", (int) matrix.getEntry(truth, guess)));
           }

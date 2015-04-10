@@ -35,9 +35,4 @@ public class ConfusionMatrixComputer {
     return matrix;
 	}
 	
-	public String csvHeader() {
-	    return "labeled_correct, labeled_total, labeled_acc, unlabeled_correct, unlabeled_total, " +
-	           "unlabeled_acc, overall_correct, overall_total, overall_acc, heldout_correct, " +
-	           "heldout_total, heldout_acc";
-	}
 }
