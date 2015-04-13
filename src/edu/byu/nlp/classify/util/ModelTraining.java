@@ -21,8 +21,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+
+import edu.byu.nlp.classify.data.DatasetLabeler;
 
 
 /**
@@ -42,12 +45,18 @@ public class ModelTraining {
 
   
   public interface SupportsTrainingOperations{
-    void sample(String variableName, String[] args);
-    void maximize(String variableName, String[] args);
+    Double sample(String variableName, int iteration, String[] args);
+    Double maximize(String variableName, int iteration, String[] args);
+    // optional method for debugging (e.g., visualize training by printing a progression of confusion matrices as training progresses)
+    DatasetLabeler getIntermediateLabeler();
   }
   
   public interface Operation{
     void doOperation(SupportsTrainingOperations model);
+  }
+  
+  public interface IntermediatePredictionLogger{
+    void logPredictions(int iteration, DatasetLabeler intermediateLabeler);
   }
   
   public static enum OperationType{
@@ -59,8 +68,16 @@ public class ModelTraining {
   public static class OperationParser{
     public static final String OUTER_DELIM = ":";
     public static final String INNER_DELIM = "-";
+    private OperationExecutor executor = new OperationExecutor();
     
-    public static Iterable<Operation> parse(String ops){
+    public OperationParser(){
+      this(null);
+    }
+    public OperationParser(IntermediatePredictionLogger predictionLogger){
+      this.executor = new OperationExecutor(predictionLogger);
+    }
+    
+    public Iterable<Operation> parse(String ops){
       List<Operation> parsedOps = Lists.newArrayList();
       for (String op: ops.split(OUTER_DELIM)){
         logger.info("Doing training operation "+op);
@@ -69,12 +86,13 @@ public class ModelTraining {
       return parsedOps;
     }
     
-    public static Operation parseInner(String rawOp){
+    public Operation parseInner(String rawOp){
       String[] fields = rawOp.split(INNER_DELIM);
-      Preconditions.checkState(fields.length>=1,"training operation must contain at least an operation name from {sample,maximize}"); // require at LEAST one field
+      Preconditions.checkState(fields.length>=2,"training operation must contain at least an operation and variable name (e.g., maximize-all)"); 
       OperationType type = OperationType.valueOf(fields[0].toUpperCase());
-      final String variableName = fields.length>=2? fields[1]: null;
-      final String[] args = fields.length>=3? Arrays.copyOfRange(fields, 2, fields.length): new String[]{};
+      final String variableName = fields[1];
+      final Integer iterations = fields.length>=3? parseInt(fields[2],"Number of Iterations must be an integer!"): null;
+      final String[] args = fields.length>=3? Arrays.copyOfRange(fields, 3, fields.length): new String[]{};
       switch(type){
       case NONE:
         return new Operation() {
@@ -87,14 +105,14 @@ public class ModelTraining {
         return new Operation(){
           @Override
           public void doOperation(SupportsTrainingOperations model) {
-            model.maximize(variableName, args); 
+            executor.maximize(model, variableName, iterations, args);
           }
         };
       case SAMPLE:
         return new Operation(){
           @Override
           public void doOperation(SupportsTrainingOperations model) {
-            model.sample(variableName, args); 
+            executor.sample(model, variableName, iterations, args);
           }
         };
       default:
@@ -102,8 +120,97 @@ public class ModelTraining {
       }
     }
   }
-  
 
+
+  private static Integer parseInt(String str, String errorMessage){
+    try{
+      return Integer.parseInt(str);
+    }
+    catch(Exception e){
+      throw new IllegalArgumentException("Unable to parse integer value from "+str+". "+errorMessage);
+    }
+  }
+  
+  
+  public static class OperationExecutor{
+
+    private double maximizationImprovementThreshold = MAXIMIZE_IMPROVEMENT_THRESHOLD;
+    private int maxNumIterations = MAXIMIZE_MAX_ITERATIONS;
+    private IntermediatePredictionLogger predictionLogger;
+
+    public OperationExecutor(){
+      this(null);
+    }
+    public OperationExecutor(IntermediatePredictionLogger predictionLogger){
+      this.predictionLogger = predictionLogger;
+    }
+    public void setMaximizationImprovementThreshold(double threshold){
+      maximizationImprovementThreshold=threshold;
+    }
+    public void setMaxNumIterations(int iterations){
+      maxNumIterations=iterations;
+    }
+    
+    private void maximize(SupportsTrainingOperations model, String variableName, Integer iterations, String[] args){
+      Double value = null;
+      // maximize until convergence if no iterations are specified
+      if (iterations==null || iterations==0){
+        value = maximizeUntilConvergence(model, maximizationImprovementThreshold, maxNumIterations,  variableName, args);
+      }
+      // maximize for the specified number of iterations 
+      else{
+        for (int i=0; i<iterations; i++){
+          value = model.maximize(variableName, i, args);
+          if (value!=null){
+            logger.info("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+i+") with value (probably unnormalized log joint) "+value);
+          }
+          if (predictionLogger!=null){
+            predictionLogger.logPredictions(i, model.getIntermediateLabeler());
+          }
+        }
+      }
+      logger.info("finished sampling "+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+iterations+") with value (probably unnormalized log joint) "+value);
+    }
+    
+    private void sample(SupportsTrainingOperations model, String variableName, Integer iterations, String[] args){
+      Double value = null;
+
+      // sample until convergence if no iterations are specified
+      if (iterations==null || iterations==0){
+        throw new IllegalArgumentException("No automatic convergence criterion implemented for sampling. You must specify a number of iterations.");
+      }
+      // sample for the specified number of iterations 
+      for (int i=0; i<iterations; i++){
+        value = model.sample(variableName, i, args);
+        if (value!=null){
+          logger.info("sample-"+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+i+") with value (probably unnormalized log joint) "+value);
+        }
+      }
+      logger.info("finished sample-"+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+iterations+") with value (probably unnormalized log joint) "+value);
+    }
+    
+    private static Double maximizeUntilConvergence(SupportsTrainingOperations model, double minChange, int maxNumIterations, String variableName, String[] args) {
+      double change = Double.MAX_VALUE;
+      double prevVal = -Double.MAX_VALUE;
+      int i = 0;
+      while (change > minChange && i < maxNumIterations){
+        Double currVal = model.maximize(variableName, i, args);
+        if (currVal!=null){
+          change = currVal - prevVal;
+          prevVal = currVal;
+          logger.debug("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iteration="+i+") with a value of "+currVal+" (improvement of "+change+")");
+        }
+        else{
+          logger.debug("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iteration="+i);
+          change = Double.MAX_VALUE; // we were given no value by which to judge convergence this time
+        }
+        
+        i++;
+      }
+      logger.info("finished maximization after "+i+" iterations");
+      return prevVal;
+    }
+  }
   
   /**
    * Parse and then perform a sequence of colon-delimited training operations with valid values 
@@ -115,8 +222,11 @@ public class ModelTraining {
    * 3) call maximize with variable name="y" and args []
    */
   public static void doOperations(String ops, SupportsTrainingOperations model){
+    doOperations(ops, model, null);
+  }
+  public static void doOperations(String ops, SupportsTrainingOperations model, IntermediatePredictionLogger predictionLogger){
     logger.info("Training operations "+ops);
-    for (Operation op: OperationParser.parse(ops)){
+    for (Operation op: new OperationParser(predictionLogger).parse(ops)){
       op.doOperation(model);
     }
   }
