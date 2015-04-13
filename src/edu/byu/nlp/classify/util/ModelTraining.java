@@ -88,9 +88,9 @@ public class ModelTraining {
     
     public Operation parseInner(String rawOp){
       String[] fields = rawOp.split(INNER_DELIM);
-      Preconditions.checkState(fields.length>=2,"training operation must contain at least an operation and variable name (e.g., maximize-all)"); 
+      Preconditions.checkState(fields.length>=1,"training operation must contain at an operation (e.g., maximize, sample, none)"); 
       OperationType type = OperationType.valueOf(fields[0].toUpperCase());
-      final String variableName = fields[1];
+      final String variableName = fields.length>=2? fields[1]: "all"; // default to "all"
       final Integer iterations = fields.length>=3? parseInt(fields[2],"Number of Iterations must be an integer!"): null;
       final String[] args = fields.length>=3? Arrays.copyOfRange(fields, 3, fields.length): new String[]{};
       switch(type){
