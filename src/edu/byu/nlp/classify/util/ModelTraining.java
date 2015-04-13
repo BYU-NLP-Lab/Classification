@@ -56,7 +56,7 @@ public class ModelTraining {
   }
   
   public interface IntermediatePredictionLogger{
-    void logPredictions(int iteration, DatasetLabeler intermediateLabeler);
+    void logPredictions(int iteration, OperationType opType, String variableName, String[] args, DatasetLabeler intermediateLabeler);
   }
   
   public static enum OperationType{
@@ -68,7 +68,7 @@ public class ModelTraining {
   public static class OperationParser{
     public static final String OUTER_DELIM = ":";
     public static final String INNER_DELIM = "-";
-    private OperationExecutor executor = new OperationExecutor();
+    private OperationExecutor executor;
     
     public OperationParser(){
       this(null);
@@ -165,7 +165,7 @@ public class ModelTraining {
             logger.info("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+i+") with value (probably unnormalized log joint) "+value);
           }
           if (predictionLogger!=null){
-            predictionLogger.logPredictions(i, model.getIntermediateLabeler());
+            predictionLogger.logPredictions(i, OperationType.MAXIMIZE, variableName, args, model.getIntermediateLabeler());
           }
         }
       }
@@ -185,11 +185,14 @@ public class ModelTraining {
         if (value!=null){
           logger.info("sample-"+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+i+") with value (probably unnormalized log joint) "+value);
         }
+        if (predictionLogger!=null){
+          predictionLogger.logPredictions(i, OperationType.SAMPLE, variableName, args, model.getIntermediateLabeler());
+        }
       }
       logger.info("finished sample-"+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+iterations+") with value (probably unnormalized log joint) "+value);
     }
     
-    private static Double maximizeUntilConvergence(SupportsTrainingOperations model, double minChange, int maxNumIterations, String variableName, String[] args) {
+    private Double maximizeUntilConvergence(SupportsTrainingOperations model, double minChange, int maxNumIterations, String variableName, String[] args) {
       double change = Double.MAX_VALUE;
       double prevVal = -Double.MAX_VALUE;
       int i = 0;
@@ -199,6 +202,9 @@ public class ModelTraining {
           change = currVal - prevVal;
           prevVal = currVal;
           logger.debug("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iteration="+i+") with a value of "+currVal+" (improvement of "+change+")");
+          if (predictionLogger!=null){
+            predictionLogger.logPredictions(i, OperationType.MAXIMIZE, variableName, args, model.getIntermediateLabeler());
+          }
         }
         else{
           logger.debug("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iteration="+i);
