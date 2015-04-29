@@ -28,9 +28,11 @@ public class ConfusionMatrixComputer {
 	public ConfusionMatrix compute(Iterable<? extends Prediction> predictions) {
     ConfusionMatrix matrix = new ConfusionMatrix(labels.size(), labels.size(), labels);
     for (Prediction prediction : predictions) {
-      int truth = prediction.getInstance().getLabel();
-      int guess = prediction.getPredictedLabel();
-      matrix.addToEntry(truth, guess, 1);
+      if (prediction.getInstance().getLabel()!=null){
+        int truth = prediction.getInstance().getLabel();
+        int guess = prediction.getPredictedLabel();
+        matrix.addToEntry(truth, guess, 1);
+      }
     }
     return matrix;
 	}
