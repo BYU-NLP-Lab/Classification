@@ -25,15 +25,12 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
-import edu.byu.nlp.annotationinterface.Instance;
-import edu.byu.nlp.annotationinterface.java.BasicInstance;
+import edu.byu.nlp.data.pipes.IndexerCalculator;
 import edu.byu.nlp.data.types.Dataset;
 import edu.byu.nlp.data.types.DatasetInstance;
-import edu.byu.nlp.data.types.SparseFeatureVector;
 import edu.byu.nlp.dataset.BasicDataset;
 import edu.byu.nlp.dataset.BasicDatasetInstance;
 import edu.byu.nlp.dataset.BasicSparseFeatureVector;
-import edu.byu.nlp.dataset.Datasets;
 import edu.byu.nlp.math.Math2;
 import edu.byu.nlp.util.DoubleArrays;
 import edu.byu.nlp.util.Indexer;
@@ -77,7 +74,7 @@ public class NaiveBayesLearnerTest {
     instances.add(new BasicDatasetInstance(new BasicSparseFeatureVector(new int[]{}, new double[]{}),                   1, instanceId++, "0", labelIndexer));
     instances.add(new BasicDatasetInstance(new BasicSparseFeatureVector(new int[]{1}, new double[]{7.}),                1, instanceId++, "0", labelIndexer));
     instances.add(new BasicDatasetInstance(new BasicSparseFeatureVector(new int[]{1}, new double[]{8.}),                0, instanceId++, "0", labelIndexer));
-    Dataset dataset = new BasicDataset("", instances, annotatorIdIndexer, featureIndexer, labelIndexer, instanceIdIndexer);
+    Dataset dataset = new BasicDataset("", instances, new IndexerCalculator<>(featureIndexer, labelIndexer, instanceIdIndexer, annotatorIdIndexer));
 	  
 		//
 		// Compute the weights that we "expect"
