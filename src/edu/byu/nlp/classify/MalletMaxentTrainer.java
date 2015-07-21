@@ -137,7 +137,7 @@ public class MalletMaxentTrainer{
    * Convert a single DatasetInstance to a mallet instance with no label
    */
   public static cc.mallet.types.Instance convert(final Alphabet dataAlphabet, DatasetInstance inst){
-    return convert(dataAlphabet, inst.asFeatureVector(), inst.getInfo().getSource());
+    return convert(dataAlphabet, inst.asFeatureVector(), inst.getInfo().getRawSource());
   }
 
   public static cc.mallet.types.Instance convert(final Alphabet dataAlphabet, SparseFeatureVector features, String source){

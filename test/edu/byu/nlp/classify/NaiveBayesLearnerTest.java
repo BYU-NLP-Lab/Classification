@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
-import edu.byu.nlp.data.pipes.IndexerCalculator;
+import edu.byu.nlp.data.streams.IndexerCalculator;
 import edu.byu.nlp.data.types.Dataset;
 import edu.byu.nlp.data.types.DatasetInstance;
 import edu.byu.nlp.dataset.BasicDataset;
@@ -48,12 +48,12 @@ public class NaiveBayesLearnerTest {
 	public void testLearnFrom() {
 
 	  // Create Indexers
-	  Indexer<Long> annotatorIdIndexer = new Indexer<Long>();
+	  Indexer<String> annotatorIdIndexer = new Indexer<String>();
 	  // 0 annotators
 	  // 5 instances
-    Indexer<Long> instanceIdIndexer = new Indexer<Long>();
+    Indexer<String> instanceIdIndexer = new Indexer<String>();
     for (long i=0; i<5; i++){
-      instanceIdIndexer.add(i);
+      instanceIdIndexer.add(""+i);
     }
     // 4 features
     Indexer<String> featureIndexer = new Indexer<String>();
@@ -68,7 +68,7 @@ public class NaiveBayesLearnerTest {
     
     // Create Dataset
     List<DatasetInstance> instances = Lists.newArrayList();
-    long instanceId = 0;
+    int instanceId = 0;
     instances.add(new BasicDatasetInstance(new BasicSparseFeatureVector(new int[]{0, 2, 3}, new double[]{1., 2., 3.}),  2, instanceId++, "0", labelIndexer));
     instances.add(new BasicDatasetInstance(new BasicSparseFeatureVector(new int[]{3, 2, 1}, new double[]{4., 5., 6.}),  0, instanceId++, "0", labelIndexer));
     instances.add(new BasicDatasetInstance(new BasicSparseFeatureVector(new int[]{}, new double[]{}),                   1, instanceId++, "0", labelIndexer));

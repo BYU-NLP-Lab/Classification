@@ -72,8 +72,8 @@ public class DatasetBuilder {
                 instance.asFeatureVector(), 
                 bestLabel, false,  // observed label
                 instance.getObservedRegressand(), false, // observed regressand 
-                instance.getAnnotations(), instance.getInfo().getInstanceId(), 
-                instance.getInfo().getSource(), data.getInfo().getLabelIndexer()));
+                instance.getAnnotations(), instance.getInfo().getSource(), 
+                instance.getInfo().getRawSource(), data.getInfo().getLabelIndexer()));
             
             if (bestLabel!=null && labeledPredictions != null) {
               labeledPredictions.add(new BasicPrediction(rankedLabels, instance));

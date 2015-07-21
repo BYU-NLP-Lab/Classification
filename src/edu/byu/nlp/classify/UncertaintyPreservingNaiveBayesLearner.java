@@ -52,7 +52,7 @@ public class UncertaintyPreservingNaiveBayesLearner implements ClassifierLearner
 		
 		// data counts (count ALL annotations)
 		for (final DatasetInstance instance : labeledData) {
-		  String src = instance.getInfo().getSource();
+		  String src = instance.getInfo().getRawSource();
 		  // instance has a label -- use that
 		  if (instance.getObservedLabel()!=null){
 	        int label = instance.getObservedLabel(); 
