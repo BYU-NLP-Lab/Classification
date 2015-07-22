@@ -21,7 +21,7 @@ public class GoldLabelLabeler implements DatasetLabeler{
 		List<Prediction> heldoutPredictions = Lists.newArrayList();
 
 		for (DatasetInstance inst: trainingInstances){
-			Preconditions.checkArgument(inst.hasLabel(),"gold labels are not available for instance "+inst.getInfo().getSource());
+			Preconditions.checkArgument(inst.hasLabel(),"gold labels are not available for instance "+inst.getInfo().getRawSource());
 			if (inst.hasAnnotations()){
 				labeledPredictions.add(new BasicPrediction(inst.getLabel(), inst));
 			}
@@ -30,7 +30,7 @@ public class GoldLabelLabeler implements DatasetLabeler{
 			}
 		}
 		for (DatasetInstance inst: heldoutInstances){
-			Preconditions.checkArgument(inst.hasLabel(),"gold labels are not available for instance "+inst.getInfo().getSource());
+			Preconditions.checkArgument(inst.hasLabel(),"gold labels are not available for instance "+inst.getInfo().getRawSource());
 			heldoutPredictions.add(new BasicPrediction(inst.getLabel(), inst));
 		}
 
