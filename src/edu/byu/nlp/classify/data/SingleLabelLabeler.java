@@ -94,7 +94,7 @@ public class SingleLabelLabeler implements DatasetLabeler {
     
     // train a classifier on a training set assembled from components 1) and 2) above
     Iterable<DatasetInstance> classifierTrainingSetInstances = Iterables.concat(annotationBasedLabeledData,setWithObservedLabels);
-    Dataset classifierTrainingSet = new BasicDataset(classifierTrainingSetInstances, Datasets.infoWithUpdatedCounts(classifierTrainingSetInstances, trainingData.getInfo()));
+    Dataset classifierTrainingSet = new BasicDataset(classifierTrainingSetInstances, trainingData.getMeasurements(), Datasets.infoWithUpdatedCounts(classifierTrainingSetInstances, trainingData.getInfo()));
     Classifier classifier = learner.learnFrom(classifierTrainingSet);
 
     // Optionally, re-do even the annotated instances with the classifier rather than the dataset builder labels 

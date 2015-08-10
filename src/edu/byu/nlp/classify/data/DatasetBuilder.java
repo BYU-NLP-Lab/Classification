@@ -54,7 +54,9 @@ public class DatasetBuilder {
        * @param data A dataset that may have been (multiply) annotated.
        * @param labeledPredictions A secondary return value. If this list is non-null, 
        * 	it is populated with the same values that make up the labeled portion of the returned dataset.
+       * 
        * @return a dataset where multiple annotations have been combined into a single label.
+       * measurements are unchanged.
        */
       public Dataset buildDataset(
               Dataset data,
@@ -81,7 +83,7 @@ public class DatasetBuilder {
             
           }
           Preconditions.checkState(!instances.isEmpty(),"built an empty dataset!");
-          Dataset newdataset = new BasicDataset(instances, Datasets.infoWithUpdatedCounts(instances, data.getInfo()));
+          Dataset newdataset = new BasicDataset(instances, data.getMeasurements(), Datasets.infoWithUpdatedCounts(instances, data.getInfo()));
           
           return newdataset;
     }
