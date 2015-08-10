@@ -24,6 +24,7 @@ import org.fest.assertions.Delta;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import edu.byu.nlp.data.streams.IndexerCalculator;
 import edu.byu.nlp.data.types.Dataset;
@@ -74,7 +75,7 @@ public class NaiveBayesLearnerTest {
     instances.add(new BasicDatasetInstance(new BasicSparseFeatureVector(new int[]{}, new double[]{}),                   1, instanceId++, "0", labelIndexer));
     instances.add(new BasicDatasetInstance(new BasicSparseFeatureVector(new int[]{1}, new double[]{7.}),                1, instanceId++, "0", labelIndexer));
     instances.add(new BasicDatasetInstance(new BasicSparseFeatureVector(new int[]{1}, new double[]{8.}),                0, instanceId++, "0", labelIndexer));
-    Dataset dataset = new BasicDataset("", instances, new IndexerCalculator<>(featureIndexer, labelIndexer, instanceIdIndexer, annotatorIdIndexer));
+    Dataset dataset = new BasicDataset("", instances, Sets.newHashSet(), new IndexerCalculator<>(featureIndexer, labelIndexer, instanceIdIndexer, annotatorIdIndexer));
 	  
 		//
 		// Compute the weights that we "expect"
