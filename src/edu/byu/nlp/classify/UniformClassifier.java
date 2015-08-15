@@ -48,7 +48,7 @@ public class UniformClassifier implements ProbabilisticClassifier {
     /** {@inheritDoc} */
     @Override
     public List<Integer> classifyNBest(int n, SparseFeatureVector s) {
-      return IntArrays.asList(IntArrays.shuffled(IntArrays.sequence(0, numLabels))).subList(0, n);
+      return IntArrays.asList(IntArrays.sequence(0, numLabels)).subList(0, n);
     }
     
 }
