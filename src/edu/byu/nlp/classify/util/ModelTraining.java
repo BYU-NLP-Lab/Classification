@@ -40,7 +40,7 @@ public class ModelTraining {
 
   private static final Logger logger = LoggerFactory.getLogger(ModelTraining.class);
   public static final double MAXIMIZE_IMPROVEMENT_THRESHOLD = 1e-6;
-  public static final int MAXIMIZE_MAX_ITERATIONS = 30;
+  public static final int MAXIMIZE_MAX_ITERATIONS = 50;
   public static final int MAXIMIZE_BATCH_SIZE = 3;
 
   
