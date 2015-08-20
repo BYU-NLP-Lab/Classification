@@ -202,7 +202,7 @@ public class ModelTraining {
         if (currVal!=null){
           change = currVal - prevVal;
           prevVal = currVal;
-          logger.debug("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iteration="+i+") with a value of "+currVal+" (improvement of "+change+")");
+          logger.info("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iteration="+i+") with a value of "+currVal+" (improvement of "+change+")");
           if (predictionLogger!=null){
             predictionLogger.logPredictions(i, OperationType.MAXIMIZE, variableName, args, model.getIntermediateLabeler());
           }
