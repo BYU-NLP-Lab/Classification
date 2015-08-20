@@ -196,8 +196,8 @@ public class ModelTraining {
       double change = Double.MAX_VALUE;
       double prevVal = -Double.MAX_VALUE;
       int i = 0;
-//      while (change > minChange && i < maxNumIterations){
-      while (i < maxNumIterations){
+      while (change > minChange && i < maxNumIterations){
+//      while (i < maxNumIterations){
         Double currVal = model.maximize(variableName, i, args);
         if (currVal!=null){
           change = currVal - prevVal;
