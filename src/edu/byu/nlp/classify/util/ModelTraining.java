@@ -80,7 +80,7 @@ public class ModelTraining {
     public Iterable<Operation> parse(String ops){
       List<Operation> parsedOps = Lists.newArrayList();
       for (String op: ops.split(OUTER_DELIM)){
-        logger.info("Doing training operation "+op);
+        logger.debug("Doing training operation "+op);
         parsedOps.add(parseInner(op));
       }
       return parsedOps;
@@ -162,14 +162,14 @@ public class ModelTraining {
         for (int i=0; i<iterations; i++){
           value = model.maximize(variableName, i, args);
           if (value!=null){
-            logger.info("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+i+") with value (probably unnormalized log joint) "+value);
+            logger.debug("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+i+") with value (probably unnormalized log joint) "+value);
           }
           if (predictionLogger!=null){
             predictionLogger.logPredictions(i, OperationType.MAXIMIZE, variableName, args, model.getIntermediateLabeler());
           }
         }
       }
-      logger.info("finished sampling "+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+iterations+") with value (probably unnormalized log joint) "+value);
+      logger.debug("finished sampling "+variableName+" (args="+Joiner.on('-').join(args)+" iterations="+iterations+") with value (probably unnormalized log joint) "+value);
     }
     
     private void sample(SupportsTrainingOperations model, String variableName, Integer iterations, String[] args){
@@ -202,7 +202,7 @@ public class ModelTraining {
         if (currVal!=null){
           change = currVal - prevVal;
           prevVal = currVal;
-          logger.info("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iteration="+i+") with a value of "+currVal+" (improvement of "+change+")");
+          logger.debug("maximize-"+variableName+" (args="+Joiner.on('-').join(args)+" iteration="+i+") with a value of "+currVal+" (improvement of "+change+")");
           if (predictionLogger!=null){
             predictionLogger.logPredictions(i, OperationType.MAXIMIZE, variableName, args, model.getIntermediateLabeler());
           }
@@ -232,7 +232,7 @@ public class ModelTraining {
     doOperations(ops, model, null);
   }
   public static void doOperations(String ops, SupportsTrainingOperations model, IntermediatePredictionLogger predictionLogger){
-    logger.info("Training operations "+ops);
+    logger.debug("Training operations "+ops);
     for (Operation op: new OperationParser(predictionLogger).parse(ops)){
       op.doOperation(model);
     }
